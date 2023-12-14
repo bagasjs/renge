@@ -2,12 +2,12 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-bool rn_init(void)
+bool rn_logger_init(void)
 {
     return false;
 }
 
-void rn_deinit(void)
+void rn_logger_deinit(void)
 {
 }
 
