@@ -3,7 +3,7 @@
 
 #include "renge/core/rapplication.h"
 
-extern void rn_setup_application(rn_application_config *config);
+extern rn_application *rn_get_application(void);
 int renge_main(int argc, char **argv);
 
 int main(int argc, char **argv)

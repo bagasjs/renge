@@ -3,47 +3,56 @@
 #include "rlog.h"
 #include "revent.h"
 
-typedef struct rn_application {
-    rn_application_config config;
-} rn_application;
+#define RN_APPLICATION_MAXIMUM_LAYERS 32
+
+struct rn_application {
+    bool initialized;
+    bool should_close;
+    const char *name;
+    RN_PFN_on_application_init on_init;
+    RN_PFN_on_application_process on_process;
+    RN_PFN_on_application_shutdown on_shutdown;
+};
 
 static rn_application application = {0};
 
-bool rn_push_application_layer(rn_application_layer_list *list, const rn_application_layer *layer)
+rn_application *rn_create_application(const rn_application_config *config)
 {
-    if(list->count + 1 > list->capacity) {
-        return false;
+    if(application.initialized) {
+        return NULL;
     }
-    list->items[list->count].name = layer->name;
-    list->items[list->count].callbacks = layer->callbacks;
-    list->count += 1;
-    return true;
+
+    application.initialized = true;
+    application.name = config->name;
+    application.on_init = config->on_init;
+    application.on_process = config->on_process;
+    application.on_shutdown = config->on_shutdown;
+
+    return &application;
 }
 
-bool rn_init(const rn_application_config *config)
+void rn_destroy_application(rn_application *application)
 {
-    bool result = false;
-    result = rn_logger_init() && result;
-    result = rn_event_manager_init() && result;
-    return result;
+    application->initialized = false;
 }
 
-void rn_deinit(void)
+void rn_set_application_should_close(rn_application *application, bool should_close)
 {
-    rn_event_manager_init();
-    rn_logger_deinit();
+    application->should_close = true;
 }
 
 int renge_main(int argc, char **argv)
 {
-    rn_setup_application(&application.config);
-    if(rn_init(&application.config)) {
-        return -2;
+    rn_application *application = rn_get_application();
+
+    application->on_init(application);
+    application->should_close = false;
+
+    while(!application->should_close) {
+        application->on_process(application);
     }
 
-    rn_logger_print(RN_LOG_LEVEL_INFO, "Engine is initialized successfully");
-    rn_logger_print(RN_LOG_LEVEL_INFO, "Application Name: %s", application.config.name);
-
-    rn_deinit();
+    application->on_shutdown(application);
+    rn_destroy_application(application);
     return 0;
 }

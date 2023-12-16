@@ -5,32 +5,20 @@
 
 #define RN_MAXIMUM_APPLICATION_LAYERS 32
 
-typedef void(*RN_PFN_on_app_layer_init)();
-typedef void(*RN_PFN_on_app_layer_process)();
-typedef void(*RN_PFN_on_app_layer_deinit)();
-
-typedef struct rn_application_layer {
-    const char *name;
-    struct {
-        RN_PFN_on_app_layer_process on_process;
-        RN_PFN_on_app_layer_init on_init;
-        RN_PFN_on_app_layer_deinit on_deinit;
-    } callbacks;
-} rn_application_layer;
-
-typedef struct rn_application_layer_list {
-    rn_application_layer items[RN_MAXIMUM_APPLICATION_LAYERS];
-    size_t count, capacity;
-} rn_application_layer_list;
+typedef struct rn_application rn_application;
+typedef void(*RN_PFN_on_application_init)(rn_application* app);
+typedef void(*RN_PFN_on_application_process)(rn_application* app);
+typedef void(*RN_PFN_on_application_shutdown)(rn_application *app);
 
 typedef struct rn_application_config {
     const char *name;
-    rn_application_layer_list layers;
+    RN_PFN_on_application_init on_init;
+    RN_PFN_on_application_process on_process;
+    RN_PFN_on_application_shutdown on_shutdown;
 } rn_application_config;
 
-bool rn_push_application_layer(rn_application_layer_list *list, const rn_application_layer *layer);
-
-bool rn_init(const rn_application_config *config);
-void rn_deinit(void);
+rn_application *rn_create_application(const rn_application_config *config);
+void rn_destroy_application(rn_application *application);
+void rn_set_application_should_close(rn_application *application, bool should_close);
 
 #endif // RENGE_APPLICATION_H_

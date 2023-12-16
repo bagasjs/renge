@@ -4,7 +4,7 @@
 
 bool rn_logger_init(void)
 {
-    return false;
+    return true;
 }
 
 void rn_logger_deinit(void)
