@@ -11,7 +11,7 @@ void rn_logger_deinit(void)
 {
 }
 
-void rn_logger_print(rn_log_level_t level, const char *fmt, ...)
+void rn_logger_print(rn_log_level level, const char *fmt, ...)
 {
     static const char *level_string[] = { "FATAL", "ERROR", "WARN", "INFO", "TRACE", };
     FILE *f = stdout;
