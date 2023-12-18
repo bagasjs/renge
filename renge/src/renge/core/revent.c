@@ -1,4 +1,5 @@
 #include "revent.h"
+#include "renge/core/rlog.h"
 
 #define RN_MAXIMUM_REGISTERED_EVENT_HANDLERS 256
 #define RN_MAXIMUM_EVENTS_IN_EVENT_QUEUE 256
@@ -21,7 +22,7 @@ bool rn_event_manager_init(void)
 {
     event_manager.handlers.capacity = RN_MAXIMUM_REGISTERED_EVENT_HANDLERS;
     event_manager.handlers.count = 0;
-    return false;
+    return true;
 }
 
 void rn_event_manager_deinit(void)

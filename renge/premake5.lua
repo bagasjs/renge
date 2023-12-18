@@ -23,6 +23,7 @@ project "renge"
     filter "configurations:Debug"
         defines "RN_DEBUG"
         symbols "On"
+        debugger "GDB"
 
     filter "configurations:Release"
         defines "RN_RELEASE"
@@ -35,5 +36,9 @@ project "renge"
     filter "system:linux"
         defines {
             "RN_SHARED",
+        }
+
+        links {
+            "X11",
         }
 

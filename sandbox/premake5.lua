@@ -16,3 +16,16 @@ project "sandbox"
     links {
         "renge",
     }
+
+    filter "configurations:Debug"
+        defines "RN_DEBUG"
+        symbols "On"
+        debugger "GDB"
+
+    filter "configurations:Release"
+        defines "RN_RELEASE"
+        symbols "On"
+
+    filter "configurations:Dist"
+        defines "RN_DIST"
+        symbols "On"

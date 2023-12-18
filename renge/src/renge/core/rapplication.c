@@ -1,7 +1,9 @@
 #include "rapplication.h"
 #include "rentry.h"
+
 #include "rlog.h"
 #include "revent.h"
+#include "rwindow.h"
 
 #define RN_APPLICATION_MAXIMUM_LAYERS 32
 
@@ -43,6 +45,16 @@ void rn_set_application_should_close(rn_application *application, bool should_cl
 
 int renge_main(int argc, char **argv)
 {
+    bool init_success = true;
+    init_success = init_success && rn_logger_init();
+    init_success = init_success && rn_event_manager_init();
+    init_success = init_success && rn_display_device_init();
+    if(!init_success) {
+        return -1;
+    }
+
+    RN_CORE_INFO("Engine initialization successfully");
+
     rn_application *application = rn_get_application();
 
     application->on_init(application);
@@ -54,5 +66,12 @@ int renge_main(int argc, char **argv)
 
     application->on_shutdown(application);
     rn_destroy_application(application);
+
+    RN_CORE_INFO("Engine deinitiaization successfully");
+
+    rn_display_device_init();
+    rn_event_manager_deinit();
+    rn_logger_deinit();
+
     return 0;
 }
