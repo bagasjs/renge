@@ -30,7 +30,6 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-
 #define RN_BIT(pos)   (1 << (pos))
 #define RN_SIGN(T, a) (((T)(a) > 0) - ((T)(a) < 0))
 #define RN_ABS(T, a)  (RN_SIGN(T, a) * a)

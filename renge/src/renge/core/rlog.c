@@ -2,8 +2,22 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+#define RN_LOGGING_BUFFER_CAPACITY (32 * 1024)
+
+typedef struct rn_logger {
+    struct {
+        char data[RN_LOGGING_BUFFER_CAPACITY];
+        size_t count;
+    } buf;
+    bool initialized;
+} rn_logger;
+
+static rn_logger logger = {0};
+
 bool rn_logger_init(void)
 {
+    if(logger.initialized) return false;
+    logger.buf.count = 0;
     return true;
 }
 

@@ -1,5 +1,4 @@
 #include "revent.h"
-#include "renge/core/rlog.h"
 
 #define RN_MAXIMUM_REGISTERED_EVENT_HANDLERS 256
 #define RN_MAXIMUM_EVENTS_IN_EVENT_QUEUE 256
@@ -14,12 +13,14 @@ typedef struct rn_event_manager {
         uint32_t head, tail;
         bool carry;
     } event_queue;
+    bool initialized;
 } rn_event_manager;
 
 static rn_event_manager event_manager = {0};
 
 bool rn_event_manager_init(void)
 {
+    if(event_manager.initialized) return false;
     event_manager.handlers.capacity = RN_MAXIMUM_REGISTERED_EVENT_HANDLERS;
     event_manager.handlers.count = 0;
     return true;
@@ -39,7 +40,7 @@ bool rn_register_event_handler(const rn_event_handler *handler)
     }
     event_manager.handlers.items[event_manager.handlers.count].on_event = handler->on_event;
     event_manager.handlers.items[event_manager.handlers.count].handled_categories = handler->handled_categories;
-    event_manager.handlers.items[event_manager.handlers.count].handled_categories = handler->handled_categories;
+    event_manager.handlers.items[event_manager.handlers.count].user_data = handler->user_data;
     event_manager.handlers.count += 1;
     return true;
 }
@@ -49,7 +50,7 @@ void rn_event_fire(rn_event_category category, const rn_event *event)
     for(uint32_t i = 0; i < event_manager.handlers.count; ++i) {
         rn_event_handler handler = event_manager.handlers.items[i];
         if(category & handler.handled_categories) {
-            handler.on_event(event);
+            handler.on_event(event, handler.user_data);
         }
     }
 }

@@ -26,15 +26,16 @@ typedef struct rn_event {
     rn_event_type type;
 } rn_event;
 
-typedef void (*RN_PFN_on_event)(const rn_event *event);
+typedef void (*RN_PFN_on_event)(const rn_event *event, void *user_data);
 
 typedef struct rn_event_handler {
     rn_event_category handled_categories;
     RN_PFN_on_event on_event;
+    void *user_data;
 } rn_event_handler;
 
-RN_API bool rn_event_manager_init(void);
-RN_API void rn_event_manager_deinit(void);
+bool rn_event_manager_init(void);
+void rn_event_manager_deinit(void);
 
 // TODO: add a way to unregister the event
 RN_API bool rn_register_event_handler(const rn_event_handler *handler);

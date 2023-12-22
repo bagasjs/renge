@@ -7,10 +7,11 @@ the engine core to be modular which mean it should be usable outside the editor.
 ## Feature Lists
 ### Implemented
 - Logging (Naive)
+- Event System (Naive)
 
 ### Not Implemented
+- Display System (Working)
 - Memory Management
-- Display System
 - 2D Rendering
 - Multi-threading
 - File System
