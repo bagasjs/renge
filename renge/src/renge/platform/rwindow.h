@@ -21,5 +21,11 @@ RN_API bool rn_enumerate_monitors_info(rn_monitor_info *monitors, uint32_t *amou
 RN_API rn_window *rn_create_window(const char *title, int x, int y, uint32_t w, uint32_t h, uint8_t flags);
 RN_API void rn_destroy_window(rn_window *window);
 
+enum rn_window_flags {
+    RN_WINDOW_VISIBLE      = RN_BIT(0),
+    RN_WINDOW_RESIZABLE    = RN_BIT(1),
+    RN_WINDOW_FULLSCREEN   = RN_BIT(2),
+    RN_WINDOW_ENABLE_MSAA4 = RN_BIT(3),
+};
 
 #endif // RENGE_WINDOW_H_

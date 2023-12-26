@@ -8,16 +8,18 @@ the engine core to be modular which mean it should be usable outside the editor.
 ### Implemented
 - Logging (Naive)
 - Event System (Naive)
+- Memory Management (Naive)
+- Display System (Naive)
+- OpenGL Context Creation (GLX Only, EGL & WGL in the future)
 
 ### Not Implemented
-- Display System (Working)
-- Memory Management
 - 2D Rendering
 - Multi-threading
 - File System
 - Audio System
 - Scripting (C#)
 - Editor
+- Vulkan???
 - etc...
 
 ## Toolchain

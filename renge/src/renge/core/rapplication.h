@@ -3,8 +3,6 @@
 
 #include <renge/core/rbase.h>
 
-#define RN_MAXIMUM_APPLICATION_LAYERS 32
-
 typedef struct rn_application rn_application;
 typedef void(*RN_PFN_on_application_init)(rn_application* app);
 typedef void(*RN_PFN_on_application_process)(rn_application* app);

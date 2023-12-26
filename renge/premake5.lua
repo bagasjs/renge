@@ -40,5 +40,6 @@ project "renge"
 
         links {
             "X11",
+            "GL",
         }
 

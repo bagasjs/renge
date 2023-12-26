@@ -20,6 +20,16 @@ RN_API void rn_core_logger_print(rn_log_level level, const char *fmt, ...);
 RN_API void rn_format_string_v(const char *fmt, void *va_list);
 RN_API void rn_format_string(const char *fmt, ...);
 
+RN_API void rn__report_assertion(bool core, const char *file, int line, const char *what);
+
+#ifndef RN_RELEASE
+#define RN_CORE_ASSERT(COND) if(COND) {} else { rn__report_assertion(true, __FILE__, __LINE__, #COND); }
+#define RN_ASSERT(COND) if(COND) {} else { rn__report_assertion(false, __FILE__, __LINE__, #COND); }
+#else
+#define RN_CORE_ASSERT(COND)
+#define RN_ASSERT(COND) 
+#endif
+
 #define RN_FATAL(...) rn_logger_print(RN_LOG_LEVEL_FATAL, __VA_ARGS__)
 #define RN_ERROR(...) rn_logger_print(RN_LOG_LEVEL_ERROR, __VA_ARGS__)
 #define RN_WARN(...)  rn_logger_print(RN_LOG_LEVEL_WARN,  __VA_ARGS__)

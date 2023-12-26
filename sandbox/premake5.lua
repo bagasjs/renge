@@ -15,6 +15,7 @@ project "sandbox"
 
     links {
         "renge",
+        "GL",
     }
 
     filter "configurations:Debug"

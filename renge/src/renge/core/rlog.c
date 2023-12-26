@@ -1,14 +1,20 @@
 #include "rlog.h"
+#include "renge/core/rbase.h"
 #include <stdio.h>
 #include <stdarg.h>
 
 #define RN_LOGGING_BUFFER_CAPACITY (32 * 1024)
+#define RN_FORMATTING_BUFFER_CAPACITY (32 * 1024)
 
 typedef struct rn_logger {
     struct {
         char data[RN_LOGGING_BUFFER_CAPACITY];
         size_t count;
-    } buf;
+    } log_buffer;
+    struct {
+        char data[RN_FORMATTING_BUFFER_CAPACITY];
+        size_t count;
+    } fmt_buffer;
     bool initialized;
 } rn_logger;
 
@@ -17,12 +23,15 @@ static rn_logger logger = {0};
 bool rn_logger_init(void)
 {
     if(logger.initialized) return false;
-    logger.buf.count = 0;
+    logger.initialized = true;
+    logger.log_buffer.count = 0;
+    logger.fmt_buffer.count = 0;
     return true;
 }
 
 void rn_logger_deinit(void)
 {
+    logger.initialized = false;
 }
 
 void rn_logger_print(rn_log_level level, const char *fmt, ...)
@@ -81,15 +90,10 @@ void rn_core_logger_print(rn_log_level level, const char *fmt, ...)
     fputc('\n', f);
 }
 
-
-
-
-
-
-
-
-
-
-
-
+void rn__report_assertion(bool core, const char *file, int line, const char *what)
+{
+    if(core) RN_CORE_FATAL("Assertion error at %s:%d: \"%s\"", file, line, what);
+    else RN_FATAL("Assertion error at %s:%d: \"%s\"", file, line, what);
+    RN_DEBUG_BREAK();
+}
 

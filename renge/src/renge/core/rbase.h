@@ -36,4 +36,11 @@
 #define RN_MIN(a, b)  ((a) < (b) ? (a) : (b))
 #define RN_MAX(a, b)  ((a) > (b) ? (a) : (b))
 
+#if _MSC_VER 
+    #include <intrin.h>
+    #define RN_DEBUG_BREAK() __debugbreak()
+#else
+    #define RN_DEBUG_BREAK() __builtin_trap()
+#endif
+
 #endif // RENGE_BASE_H_
