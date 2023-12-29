@@ -10,6 +10,7 @@
 #include <GL/glx.h>
 
 typedef struct rn_opengl_context {
+    int source;
     struct {
         GLXContext handle;
         GLXWindow window;
@@ -24,7 +25,7 @@ rn_opengl_context *rn_create_opengl_context(rn_window *window, const rn_opengl_c
     GLXContext share = NULL;
     GLXContext result_context = NULL;
 
-    if(config->opengles) {
+    if(config->api == RN_OPENGL_CONTEXT_API_OPENGLES) {
         if (!device->glx.extensions.ARB_create_context ||
                 !device->glx.extensions.ARB_create_context_profile ||
                 !device->glx.extensions.EXT_create_context_es2_profile) {
@@ -52,10 +53,10 @@ rn_opengl_context *rn_create_opengl_context(rn_window *window, const rn_opengl_c
         }
 
         int index = 0, mask = 0, flags = 0;
-        if(config->opengles) {
+        if(config->api == RN_OPENGL_CONTEXT_API_OPENGLES) {
             mask |= GLX_CONTEXT_ES2_PROFILE_BIT_EXT;
         } else {
-            if (config->core_profile) mask |= GLX_CONTEXT_CORE_PROFILE_BIT_ARB;
+            if (config->profile == RN_OPENGL_CONTEXT_CORE_PROFILE) mask |= GLX_CONTEXT_CORE_PROFILE_BIT_ARB;
             else mask |= GLX_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB;
         }
 
@@ -124,6 +125,7 @@ void rn_make_opengl_context_current(rn_window *window, rn_opengl_context *contex
             return;
         }
     }
+
 }
 
 void rn_swap_opengl_buffer(rn_window *window, rn_opengl_context *context)

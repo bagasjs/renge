@@ -1,6 +1,7 @@
 #include "renge.h"
 #include "renge/platform/rgc.h"
-#include <GL/gl.h>
+#include <glad/glad.h>
+
 
 typedef struct sandbox_state {
     rn_window *window;
@@ -38,17 +39,27 @@ void sandbox_init(rn_application *application)
     config.forward = true;
     config.version.major = 3;
     config.version.minor = 3;
-    config.core_profile = true;
+    config.profile = RN_OPENGL_CONTEXT_CORE_PROFILE;
     state->opengl_context = rn_create_opengl_context(state->window, &config);
+
     rn_make_opengl_context_current(state->window, state->opengl_context);
+
+    if(gladLoadGL() != 0) {
+        RN_FATAL("Failed to load OpenGL Functions");
+    }
 
     RN_INFO("GL_RENDERER: %s", glGetString(GL_RENDERER));
     RN_INFO("GL_VERSION: %s", glGetString(GL_VERSION));
     RN_INFO("GLSL_VERSION: %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+
 }
 
 void sandbox_process(rn_application *application) 
 {
+    sandbox_state *state = rn_get_application_user_data(application);
+    glClearColor(1.0f, 0.2f, 0.4f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    rn_swap_opengl_buffer(state->window, state->opengl_context);
 }
 
 void sandbox_shutdown(rn_application *application) 

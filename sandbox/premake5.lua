@@ -7,10 +7,12 @@ project "sandbox"
 
     files {
         "%{prj.location}/src/main.c",
+        "../vendors/glad/src/glad.c",
     }
 
     includedirs {
         "../renge/src/",
+        "../vendors/glad/include/",
     }
 
     links {

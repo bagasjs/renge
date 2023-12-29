@@ -1,1 +1,2 @@
 -Irenge/src/
+-Ivendors/glad/include/

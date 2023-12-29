@@ -5,9 +5,25 @@
 
 typedef struct rn_opengl_context rn_opengl_context;
 
+typedef enum rn_opengl_context_config_enums {
+    RN_OPENGL_CONTEXT_CONFIG_NONE = 0,
+
+    RN_OPENGL_CONTEXT_FROM_GLX,
+    RN_OPENGL_CONTEXT_FROM_EGL,
+    RN_OPENGL_CONTEXT_FROM_MESA,
+
+    RN_OPENGL_CONTEXT_ANY_PROFILE,
+    RN_OPENGL_CONTEXT_COMPATIBILITY_PROFILE,
+    RN_OPENGL_CONTEXT_CORE_PROFILE,
+
+    RN_OPENGL_CONTEXT_API_OPENGL,
+    RN_OPENGL_CONTEXT_API_OPENGLES,
+} rn_opengl_context_config_enums;
+
 typedef struct rn_opengl_context_config {
-    bool core_profile;
-    bool opengles;
+    int profile;
+    int source;
+    int api;
     bool forward;
     bool debug;
     struct { int major, minor; } version;
